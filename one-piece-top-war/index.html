@@ -101,32 +101,41 @@
   init();
 
   function init() {
+    // 初始化场景，添加场景内物体
     var scene = initScene();
+    // 初始化整个流程，创建相机、渲染器
     view = initView(scene);
     controls = new THREE.TrackballControls( view.camera );
     animate();
   }
 
   function initScene() {
+    // 创建场景Scene
     var scene = new THREE.Scene();
+    // 添加环境光
     scene.add(new THREE.AmbientLight(0x3f2806));
+    // 添加方向光
     var light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(0, 100, 100);
     scene.add(light);
 
     // 设置地面
+    // 地面纹理
     var textureSquares = textureLoader.load( "./imgs/bright_squares256.png" );
     textureSquares.repeat.set( 10, 10 );
     textureSquares.wrapS = textureSquares.wrapT = THREE.RepeatWrapping;
     textureSquares.magFilter = THREE.NearestFilter;
     textureSquares.format = THREE.RGBFormat;
+    // 地面材质
     var groundMaterial = new THREE.MeshPhongMaterial( {
       shininess: 80,
       color: 0xffffff,
       specular: 0xffffff,
       map: textureSquares
     } );
+    // 地面形状
     var planeGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
+    // 生成地面
     var ground = new THREE.Mesh( planeGeometry, groundMaterial );
     ground.position.set( 0, -FOV, 0 );
     ground.rotation.x = - Math.PI / 2;
@@ -142,6 +151,7 @@
           map: texture
         });
         var dotmesh = new THREE.Mesh(geometry, material);
+        // 设置人物位置
         dotmesh.position.set(item.position[0], item.position[1], item.position[2]);
         scene.add(dotmesh);
       });
@@ -152,16 +162,22 @@
 
   function initView(scene) {
     var framecontainer = document.getElementById('container_logzbuf');
+    // 创建相机
     var camera = new THREE.PerspectiveCamera(FOV, SCREEN_WIDTH / SCREEN_HEIGHT, NEAR, FAR);
+    // 设置相机位置
     camera.position.set(0, 0, 300);
+    // 将相机添加到场景
     scene.add(camera);
 
+    // 创建渲染器
     var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
+    // 设置渲染器参数
     renderer.setClearColor(0xf0f0f0);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(SCREEN_WIDTH/2, SCREEN_HEIGHT);
     renderer.domElement.style.position = 'relative';
     renderer.domElement.id = 'renderer_logzbuf';
+    // 将渲染器添加到html容器中
     framecontainer.appendChild(renderer.domElement);
 
     return {
