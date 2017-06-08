@@ -106,6 +106,7 @@
     // 初始化整个流程，创建相机、渲染器
     view = initView(scene);
     controls = new THREE.TrackballControls( view.camera );
+    // 渲染
     animate();
   }
 
@@ -189,9 +190,12 @@
   }
 
   function animate() {
+    // 帧动画
     requestAnimationFrame(animate);
+    // 更新控制器
     controls.update();
 
+    // 更新屏幕画面
     render();
   }
   function render() {
